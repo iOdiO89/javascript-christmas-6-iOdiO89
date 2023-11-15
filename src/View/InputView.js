@@ -18,6 +18,16 @@ const InputView = {
 
     },
 
+    async readMenuInfo(){
+        try{
+            const input = await MissionUtils.Console.readLineAsync("주문하실 메뉴를 메뉴와 개수를 알려 주세요. (e.g. 해산물파스타-2,레드와인-1,초코케이크-1)")
+            return input
+        }
+        catch(error){
+            MissionUtils.Console.print('[ERROR] 유효하지 않은 주문입니다. 다시 입력해 주세요.')
+        }
+    },
+
     checkIsNumber(number){
         if (isNaN(number)) 
             throw new Error('[ERROR] 유효하지 않은 날짜입니다. 다시 입력해 주세요.')

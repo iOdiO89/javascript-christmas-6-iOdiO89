@@ -1,5 +1,7 @@
 import InputView from '../View/InputView'
 import OutputView from '../View/OutputView'
+import Menu from '../Model/Menu'
+import { MissionUtils } from '@woowacourse/mission-utils'
 
 class Event{
     #date // 방문 예상 날짜
@@ -19,8 +21,53 @@ class Event{
     async runEvent(){
         OutputView.printWelcomeMsg()
         this.#date = await InputView.readDate()
+
+        this.#menu = await this.getMenuInfo()
     }
 
+    async getMenuInfo(){
+        const menuInfo = await InputView.readMenuInfo()
+        console.log(`input: `)
+        console.log(menuInfo)
+        const result = this.handleMenuInfo(menuInfo)
+        console.log('result')
+        console.log(result)
+        this.checkMenuDuplicate(result)
+
+        const menuList = []
+        result.map(item => {
+            const menu = new Menu(item.name, item.count)
+            menuList.push(menu)
+        })
+        
+        return menuList
+    }
+
+    handleMenuInfo(menuInfo){
+        try{ 
+            if(!menuInfo.includes('-')) throw new Error('[ERROR] 유효하지 않은 주문입니다. 다시 입력해 주세요.')
+    
+            const result = []   
+            menuInfo.split(',').forEach(pair => {
+                const [menuName, count] = pair.split('-')
+                if(menuName===undefined || count===undefined) throw new Error('[ERROR] 유효하지 않은 주문입니다. 다시 입력해 주세요.')
+    
+                result.push({ name: menuName.trim(), count: count.trim() })
+            })
+            return result
+        }
+        catch(error){
+            MissionUtils.Console.print('[ERROR] 유효하지 않은 주문입니다. 다시 입력해 주세요.')
+        }
+    }
+
+    checkMenuDuplicate(menuList){
+        const names = menuList.map(item => item.name)
+        const duplicateNames = names.filter((name, i) => names.indexOf(name) !== i)
+
+        if(duplicateNames.length > 0) 
+            throw new Error('[ERROR] 유효하지 않은 주문입니다. 다시 입력해 주세요.')
+    }
 }
 
 module.exports = Event
