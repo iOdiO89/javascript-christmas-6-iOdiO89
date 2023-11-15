@@ -28,7 +28,7 @@ const OutputView = {
 
     printGift(totalPrice) {
         MissionUtils.Console.print("<증정 메뉴>")
-        if(totalPrice >= 1200000)
+        if(totalPrice >= 120000)
             MissionUtils.Console.print('샴페인 1개')
         else
             MissionUtils.Console.print('없음')
