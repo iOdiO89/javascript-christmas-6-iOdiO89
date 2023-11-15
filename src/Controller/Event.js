@@ -19,20 +19,22 @@ class Event{
         this.#totalPrice = 0
     }
 
+    // 이벤트 플래너 전체 진행
     async runEvent(){
-        OutputView.printWelcomeMsg()
-        this.#date = await InputView.readDate()
-        this.#menu = await this.#getMenuInfo()
-        OutputView.printPreviewMsg(this.#date)
-        this.#printMenu()
-        this.#printTotalPrice()
-        OutputView.printGift(this.#totalPrice)
-        this.#printBenefit(this.#discount)
-        OutputView.printTotalDiscount(this.#discount + this.#giftPrice)
-        OutputView.printFinalPrice(this.#totalPrice, this.#discount)
-        OutputView.printBadge(this.#discount + this.#giftPrice)
+        OutputView.printWelcomeMsg() // 안녕하세요! 우테코 식당 12월 이벤트 플래너입니다.
+        this.#date = await InputView.readDate() // 날짜 입력받기
+        this.#menu = await this.#getMenuInfo() // 메뉴, 개수 입력받기
+        OutputView.printPreviewMsg(this.#date) // 12월 {날짜}에 우테코 식당에서 받을 이벤트 혜택 미리 보기!
+        this.#printMenu() // 주문 메뉴 출력
+        this.#printTotalPrice() // 할인 전 총주문 금액 출력
+        OutputView.printGift(this.#totalPrice) // 증정 메뉴 출력
+        this.#printBenefit(this.#discount) // 혜택 내역 출력
+        OutputView.printTotalDiscount(this.#discount + this.#giftPrice) // 총혜택 금액 출력
+        OutputView.printFinalPrice(this.#totalPrice, this.#discount) // 할인 후 예상 결제 금액 출력
+        OutputView.printBadge(this.#discount + this.#giftPrice) // 12월 이벤트 배지 출력
     }
 
+    // 메뉴 이름, 개수 개별 출력
     #printMenu(){
         OutputView.printMenuMsg()
         this.#menu.map(menu => {
@@ -42,6 +44,7 @@ class Event{
         })
     }
 
+    // 할인 전 총주문 금액 출력
     #printTotalPrice(){
         this.#totalPrice = 0
         this.#menu.map(menu => {
@@ -52,19 +55,21 @@ class Event{
         OutputView.printTotalPrice(this.#totalPrice)
     }
 
+    // 헤택 내역 출력
     #printBenefit(){
         OutputView.printBenefitMsg()
-        this.#discount = 0
-        this.#discount += this.#christmasDiscount()
+        this.#discount = 0 // init
+        this.#discount += this.#christmasDiscount() // 크리스마스 디데이 할인
         if(this.#isWeekday())
-            this.#discount += this.#weekDayDiscount()
-        else this.#discount += this.#weekendDiscount()
-        this.#discount += this.#specialDiscount()
-        this.#giftPrice = this.#giftDiscount()
+            this.#discount += this.#weekDayDiscount() // 평일 할인
+        else this.#discount += this.#weekendDiscount() // 주말 할인
+        this.#discount += this.#specialDiscount() // 특별 할인
+        this.#giftPrice = this.#giftDiscount() // 증정 이벤트
 
         if((this.#discount+this.#giftPrice) === 0) OutputView.printMsg(`없음`)
     }
 
+    // 크리스마스 디데이 할인
     #christmasDiscount(){
         let discount = 0
         if(this.#date <= 25) {
@@ -75,6 +80,7 @@ class Event{
         return discount
     }
 
+    // 평일 할인
     #weekDayDiscount(){
         let discount = 0
         this.#menu.map(menu => {
@@ -84,6 +90,7 @@ class Event{
         return discount
     }
 
+    // 주말 할인
     #weekendDiscount(){
         let discount = 0
         this.#menu.map(menu => {
@@ -93,6 +100,7 @@ class Event{
         return discount
     }
 
+    // 평일 or 주말 확인. 평일이면 return true / 주말이면 return false
     #isWeekday(){
         if(this.#date%7 !== 1 && this.#date%7 !== 2) return true
         return false

@@ -17,8 +17,8 @@ class Menu{
 
     #validate(name, count){
         try{
-            this.#checkMenuName(name)
-            this.#checkMenuCount(count)
+            this.#checkMenuName(name) // 메뉴에 았던 음식을 주문했는지 확인
+            this.#checkMenuCount(count) // 개수 값 유효성 확인
         }
         catch(error){
             MissionUtils.Console.print('[ERROR] 유효하지 않은 주문입니다. 다시 입력해 주세요.')
@@ -26,6 +26,7 @@ class Menu{
 
     }
 
+    // 입력받은 메뉴이름을 바탕으로 가격, 종류 저장
     #getMenuInfo(){
         menuInfo.map((menu)=>{
             if(menu.name === this.#name){
@@ -36,6 +37,7 @@ class Menu{
         })
     }
 
+    // 메뉴에 없는 음식을 주문했는지 확인
     #checkMenuName(name){
         let incorrectCount = 0
         menuInfo.map((menu) => {
@@ -45,6 +47,7 @@ class Menu{
             throw new Error('[ERROR] 유효하지 않은 주문입니다. 다시 입력해 주세요.')
     }
 
+    // 개수 값 유효성 확인
     #checkMenuCount(count){
         if(isNaN(count)) throw new Error('[ERROR] 유효하지 않은 주문입니다. 다시 입력해 주세요.')
         if(!Number.isInteger(count)) throw new Error('[ERROR] 유효하지 않은 주문입니다. 다시 입력해 주세요.')
