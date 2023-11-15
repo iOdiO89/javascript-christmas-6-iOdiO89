@@ -1,4 +1,5 @@
 import menuInfo from '../libs/menuInfo'
+import { MissionUtils } from '@woowacourse/mission-utils'
 
 class Menu{
     #name // 메뉴 이름
@@ -15,8 +16,14 @@ class Menu{
     }
 
     #validate(name, count){
-        this.#checkMenuName(name)
-        this.#checkMenuCount(count)
+        try{
+            this.#checkMenuName(name)
+            this.#checkMenuCount(count)
+        }
+        catch(error){
+            MissionUtils.Console.print('[ERROR] 유효하지 않은 주문입니다. 다시 입력해 주세요.')
+        }
+
     }
 
     #getMenuInfo(){
@@ -30,19 +37,18 @@ class Menu{
     }
 
     #checkMenuName(name){
+        let incorrectCount = 0
         menuInfo.map((menu) => {
-            if(menu.name === name) return
+            if(menu.name !== name) incorrectCount += 1
         })
-
-        throw new Error('[ERROR] 유효하지 않은 주문입니다. 다시 입력해 주세요.')
+        if(incorrectCount === menuInfo.length)
+            throw new Error('[ERROR] 유효하지 않은 주문입니다. 다시 입력해 주세요.')
     }
 
     #checkMenuCount(count){
-        const number = Number(count)
-
-        if(isNaN(number)) throw new Error('[ERROR] 유효하지 않은 주문입니다. 다시 입력해 주세요.')
-        if(!Number.isInteger(number)) throw new Error('[ERROR] 유효하지 않은 주문입니다. 다시 입력해 주세요.')
-        if(number<1) throw new Error('[ERROR] 유효하지 않은 주문입니다. 다시 입력해 주세요.')
+        if(isNaN(count)) throw new Error('[ERROR] 유효하지 않은 주문입니다. 다시 입력해 주세요.')
+        if(!Number.isInteger(count)) throw new Error('[ERROR] 유효하지 않은 주문입니다. 다시 입력해 주세요.')
+        if(count<1) throw new Error('[ERROR] 유효하지 않은 주문입니다. 다시 입력해 주세요.')
     }
 }
 

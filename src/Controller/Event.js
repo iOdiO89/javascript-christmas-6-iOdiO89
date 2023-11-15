@@ -27,38 +27,37 @@ class Event{
 
     async getMenuInfo(){
         const menuInfo = await InputView.readMenuInfo()
-        console.log(`input: `)
-        console.log(menuInfo)
-        const result = this.handleMenuInfo(menuInfo)
-        console.log('result')
-        console.log(result)
-        this.checkMenuDuplicate(result)
+        try{
+            this.checkMenuValidity(menuInfo) // 메뉴 형식이 예시와 다른지 체크 
+            const result = this.handleMenuInfo(menuInfo) // str to array
+            this.checkMenuDuplicate(result) // 중복 메뉴가 있는지 체크
 
-        const menuList = []
-        result.map(item => {
-            const menu = new Menu(item.name, item.count)
-            menuList.push(menu)
-        })
-        
-        return menuList
-    }
-
-    handleMenuInfo(menuInfo){
-        try{ 
-            if(!menuInfo.includes('-')) throw new Error('[ERROR] 유효하지 않은 주문입니다. 다시 입력해 주세요.')
-    
-            const result = []   
-            menuInfo.split(',').forEach(pair => {
-                const [menuName, count] = pair.split('-')
-                if(menuName===undefined || count===undefined) throw new Error('[ERROR] 유효하지 않은 주문입니다. 다시 입력해 주세요.')
-    
-                result.push({ name: menuName.trim(), count: count.trim() })
+            const menuList = []
+            result.map(item => {
+                const menu = new Menu(item.name, item.count)
+                menuList.push(menu)
             })
-            return result
+            
+            return menuList
         }
         catch(error){
             MissionUtils.Console.print('[ERROR] 유효하지 않은 주문입니다. 다시 입력해 주세요.')
         }
+    }
+
+    handleMenuInfo(menuInfo){
+        const result = []   
+        menuInfo.split(',').forEach(pair => {
+            const [menuName, count] = pair.split('-')
+            if(menuName===undefined || count===undefined) throw new Error('[ERROR] 유효하지 않은 주문입니다. 다시 입력해 주세요.')
+
+            result.push({ name: menuName.trim(), count: count.trim() })
+        })
+        return result
+    }
+
+    checkMenuValidity(menuInfo){
+        if(!menuInfo.includes('-')) throw new Error('[ERROR] 유효하지 않은 주문입니다. 다시 입력해 주세요.')
     }
 
     checkMenuDuplicate(menuList){
