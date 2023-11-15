@@ -17,6 +17,7 @@ class Event{
         this.#gift = null
         this.#discount = 0
         this.#totalPrice = 0
+        this.#giftPrice = 0
     }
 
     // 이벤트 플래너 전체 진행
@@ -59,13 +60,15 @@ class Event{
     #printBenefit(){
         OutputView.printBenefitMsg()
         this.#discount = 0 // init
-        this.#discount += this.#christmasDiscount() // 크리스마스 디데이 할인
-        if(this.#isWeekday())
-            this.#discount += this.#weekDayDiscount() // 평일 할인
-        else this.#discount += this.#weekendDiscount() // 주말 할인
-        this.#discount += this.#specialDiscount() // 특별 할인
-        this.#giftPrice = this.#giftDiscount() // 증정 이벤트
-
+        this.#giftPrice = 0
+        if(this.#totalPrice >= 10000){
+            this.#discount += this.#christmasDiscount() // 크리스마스 디데이 할인
+            if(this.#isWeekday())
+                this.#discount += this.#weekDayDiscount() // 평일 할인
+            else this.#discount += this.#weekendDiscount() // 주말 할인
+            this.#discount += this.#specialDiscount() // 특별 할인
+            this.#giftPrice = this.#giftDiscount() // 증정 이벤트
+        }
         if((this.#discount+this.#giftPrice) === 0) OutputView.printMsg(`없음`)
     }
 
