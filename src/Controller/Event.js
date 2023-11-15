@@ -129,20 +129,27 @@ class Event{
 
     // 메뉴 이름, 개수 입력받기
     async #getMenuInfo(){
-        const menuInfo = await InputView.readMenuInfo()
-        this.#checkMenuValidity(menuInfo) // 메뉴 형식이 예시와 다른지 체크 
+        while(true){
+            try{
+                const menuInfo = await InputView.readMenuInfo()
+                this.#checkMenuValidity(menuInfo) // 메뉴 형식이 예시와 다른지 체크 
 
-        const menuArray = this.#convertMenuArray(menuInfo) // str to array
-        this.#checkMenuCount(menuArray) // 메뉴 총합이 20 넘는지 확인
-        const result = this.#checkMenuDuplicate(menuArray) // 중복 메뉴가 있는지 체크
+                const menuArray = this.#convertMenuArray(menuInfo) // str to array
+                this.#checkMenuCount(menuArray) // 메뉴 총합이 20 넘는지 확인
+                const result = this.#checkMenuDuplicate(menuArray) // 중복 메뉴가 있는지 체크
 
-        const menuList = []
-        result.map(item => {
-            const menu = new Menu(item.name, item.count)
-            menuList.push(menu)
-        })
-        // this.#checkOnlyDrink(menuList)
-        return menuList
+                const menuList = []
+                result.map(item => {
+                    const menu = new Menu(item.name, item.count)
+                    menuList.push(menu)
+                })
+                this.#checkOnlyDrink(menuList)
+                return menuList 
+            }
+            catch(error){
+                MissionUtils.Console.print('[ERROR] 유효하지 않은 주문입니다. 다시 입력해 주세요.')
+            } 
+        }
     }
 
     // '메뉴이름-개수' 형식으로 되어있는지 확인

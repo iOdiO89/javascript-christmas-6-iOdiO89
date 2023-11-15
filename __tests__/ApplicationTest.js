@@ -26,7 +26,7 @@ const getOutput = (logSpy) => {
 const expectLogContains = (received, expectedLogs) => {
     expectedLogs.forEach((log) => {
         expect(received).toContain(log);
-    });
+    })
 }
 
 const runDateException = async (input) => {
@@ -43,6 +43,21 @@ const runDateException = async (input) => {
     // then
     expect(logSpy).toHaveBeenCalledWith(expect.stringContaining(INVALID_DATE_MESSAGE));
 }
+
+const runMenuException = async (input) => {
+    // given
+    const INVALID_ORDER_MESSAGE = "[ERROR] 유효하지 않은 주문입니다. 다시 입력해 주세요.";
+    const INPUTS_TO_END = ["해산물파스타-2"];
+    const logSpy = getLogSpy();
+    mockQuestions(["3", input, ...INPUTS_TO_END]);
+
+    // when
+    const app = new App();
+    await app.run();
+
+    // then
+    expect(logSpy).toHaveBeenCalledWith(expect.stringContaining(INVALID_ORDER_MESSAGE));
+  }
 
 describe("기능 테스트", () => {
     test("모든 타이틀 출력", async () => {
@@ -95,18 +110,19 @@ describe("예외 테스트", () => {
         await runDateException("32")
     })
 
-    test("주문 예외 테스트", async () => {
-      // given
-      const INVALID_ORDER_MESSAGE = "[ERROR] 유효하지 않은 주문입니다. 다시 입력해 주세요.";
-      const INPUTS_TO_END = ["해산물파스타-2"];
-      const logSpy = getLogSpy();
-      mockQuestions(["3", "제로콜라-a", ...INPUTS_TO_END]);
-
-      // when
-      const app = new App();
-      await app.run();
-
-      // then
-      expect(logSpy).toHaveBeenCalledWith(expect.stringContaining(INVALID_ORDER_MESSAGE));
+    test("[주문] 주문 형식이 잘못된 경우", async () => {
+        await runMenuException("제로콜라1,바비큐립1")
+    })
+    test("[주문] 메뉴에 없는 음식을 주문한 경우", async () => {
+        await runMenuException("펩시콜라-1,바비큐립-1")
+    })
+    test("[주문] 중복된 메뉴가 있는 경우", async () => {
+        await runMenuException("바비큐립-1,바비큐립-2")
+    })
+    // test("[주문] 메뉴 개수가 20개 초과인 경우", async () => {
+    //     await runMenuException("바비큐립-15,제로콜라-20")
+    // })
+    test("[주문] 음료만 주문한 경우", async () => {
+        await runMenuException("제로콜라-5")
     })
 })
