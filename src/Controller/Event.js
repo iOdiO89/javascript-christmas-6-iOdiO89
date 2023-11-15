@@ -135,7 +135,6 @@ class Event{
                 this.#checkMenuValidity(menuInfo) // 메뉴 형식이 예시와 다른지 체크 
 
                 const menuArray = this.#convertMenuArray(menuInfo) // str to array
-                this.#checkMenuCount(menuArray) // 메뉴 총합이 20 넘는지 확인
                 const result = this.#checkMenuDuplicate(menuArray) // 중복 메뉴가 있는지 체크
 
                 const menuList = []
@@ -143,6 +142,7 @@ class Event{
                     const menu = new Menu(item.name, item.count)
                     menuList.push(menu)
                 })
+                this.#checkMenuCount(menuList) // 메뉴 총합이 20 넘는지 확인
                 this.#checkOnlyDrink(menuList)
                 return menuList 
             }
@@ -176,8 +176,13 @@ class Event{
 
     // 메뉴 20개 넘는지 확인
     #checkMenuCount(menuList){
-        if(menuList.length > 20)
+        let totalCount = 0
+        menuList.forEach(menu => {
+            totalCount += menu.getCount()
+        })
+        if(totalCount > 20)
             throw new Error('[ERROR] 유효하지 않은 주문입니다. 다시 입력해 주세요.')
+        return
     }
 
     // 메뉴 중복 여부 확인

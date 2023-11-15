@@ -119,9 +119,9 @@ describe("예외 테스트", () => {
     test("[주문] 중복된 메뉴가 있는 경우", async () => {
         await runMenuException("바비큐립-1,바비큐립-2")
     })
-    // test("[주문] 메뉴 개수가 20개 초과인 경우", async () => {
-    //     await runMenuException("바비큐립-15,제로콜라-20")
-    // })
+    test("[주문] 메뉴 개수가 20개 초과인 경우", async () => {
+        await runMenuException("바비큐립-15,제로콜라-20")
+    })
     test("[주문] 음료만 주문한 경우", async () => {
         await runMenuException("제로콜라-5")
     })
