@@ -5,19 +5,15 @@ const InputView = {
         while(true){
             try{
                 const input = await MissionUtils.Console.readLineAsync("12월 중 식당 예상 방문 날짜는 언제인가요? (숫자만 입력해 주세요!)")
-                console.log(`날짜 : ${input}`)
-                const date = Number(input)
-                this.checkIsNumber(date)
-                this.checkIsInteger(date)
-                this.checkDateRange(date)
-        
-                return date
+                this.checkIsNumber(Number(input))
+                this.checkIsInteger(Number(input))
+                this.checkDateRange(Number(input))
+                return Number(input)
             }
             catch(error){
                 MissionUtils.Console.print('[ERROR] 유효하지 않은 날짜입니다. 다시 입력해 주세요.')
             }
         }
-
     },
 
     async readMenuInfo(){

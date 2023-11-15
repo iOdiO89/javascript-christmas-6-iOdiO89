@@ -22,9 +22,7 @@ class Event{
     async runEvent(){
         OutputView.printWelcomeMsg()
         this.#date = await InputView.readDate()
-
         this.#menu = await this.getMenuInfo()
-
         OutputView.printPreviewMsg(this.#date)
         this.printMenu()
         this.printTotalPrice()
@@ -128,7 +126,7 @@ class Event{
             menuList.push(menu)
         })
         return menuList
-}
+    }
 
     checkMenuValidity(menuInfo){
         if(!menuInfo.includes('-')) throw new Error('[ERROR] 유효하지 않은 주문입니다. 다시 입력해 주세요.')
