@@ -47,7 +47,7 @@ const OutputView = {
         MissionUtils.Console.print('')
         MissionUtils.Console.print("<총혜택 금액>")
         if(discount > 0)
-            MissionUtils.Console.print(`${discount.toLocaleString()}원`)
+            MissionUtils.Console.print(`-${discount.toLocaleString()}원`)
         else
             MissionUtils.Console.print('0원')
         MissionUtils.Console.print('')

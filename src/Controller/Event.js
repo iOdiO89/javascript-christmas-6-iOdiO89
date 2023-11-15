@@ -10,6 +10,7 @@ class Event{
     #gift // 사은품
     #badge // 이벤트 뱃지
     #discount // 할인 금액
+    #giftPrice // 증정품 가격
 
     constructor(){
         this.#badge = null
@@ -29,9 +30,9 @@ class Event{
         this.printTotalPrice()
         OutputView.printGift(this.#totalPrice)
         this.printBenefit(this.#discount)
-        OutputView.printTotalDiscount(this.#discount)
+        OutputView.printTotalDiscount(this.#discount + this.#giftPrice)
         OutputView.printFinalPrice(this.#totalPrice, this.#discount)
-        OutputView.printBadge(this.#discount)
+        OutputView.printBadge(this.#discount + this.#giftPrice)
     }
 
     printMenu(){
@@ -59,7 +60,7 @@ class Event{
             this.#discount += this.weekDayDiscount()
         else this.#discount += this.weekendDiscount()
         this.#discount += this.specialDiscount()
-        this.#discount += this.giftDiscount()
+        this.#giftPrice = this.giftDiscount()
 
         if(this.#discount === 0) OutputView.printMsg(`없음`)
     }
@@ -77,7 +78,7 @@ class Event{
     weekDayDiscount(){
         let discount = 0
         this.#menu.map(menu => {
-            if(menu.getType() === '디저트') discount += 2023
+            if(menu.getType() === '디저트') discount += (2023 * menu.getCount())
         })
         if(discount>0) OutputView.printMsg(`평일 할인: -${discount.toLocaleString()}원`)
         return discount
@@ -86,7 +87,7 @@ class Event{
     weekendDiscount(){
         let discount = 0
         this.#menu.map(menu => {
-            if(menu.getType() === '메인') discount += 2023
+            if(menu.getType() === '메인') discount += (2023 * menu.getCount())
         })
         if(discount>0) OutputView.printMsg(`주말 할인: -${discount.toLocaleString()}원`)
         return discount
@@ -106,7 +107,7 @@ class Event{
     }
 
     giftDiscount(){
-        if(this.#totalPrice > 1200000){
+        if(this.#totalPrice > 120000){
             OutputView.printMsg(`증정 이벤트: -25,000원`)
             return 25000
         }
