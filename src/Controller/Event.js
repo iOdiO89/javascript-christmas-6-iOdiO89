@@ -45,6 +45,7 @@ class Event{
     }
 
     printTotalPrice(){
+        this.#totalPrice = 0
         this.#menu.map(menu => {
             const count = menu.getCount()
             const price = menu.getPrice()
@@ -55,6 +56,7 @@ class Event{
 
     printBenefit(){
         OutputView.printBenefitMsg()
+        this.#discount = 0
         this.#discount += this.christmasDiscount()
         if(this.isWeekday())
             this.#discount += this.weekDayDiscount()
@@ -62,7 +64,7 @@ class Event{
         this.#discount += this.specialDiscount()
         this.#giftPrice = this.giftDiscount()
 
-        if(this.#discount === 0) OutputView.printMsg(`없음`)
+        if((this.#discount+this.#giftPrice) === 0) OutputView.printMsg(`없음`)
     }
 
     christmasDiscount(){
