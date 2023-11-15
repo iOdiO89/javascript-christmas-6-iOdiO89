@@ -118,22 +118,17 @@ class Event{
 
     async getMenuInfo(){
         const menuInfo = await InputView.readMenuInfo()
-        console.log(`주문메뉴: ${menuInfo}`)
-        try{
-            this.checkMenuValidity(menuInfo) // 메뉴 형식이 예시와 다른지 체크 
-            const result = this.checkMenuDuplicate(menuInfo) // 중복 메뉴가 있는지 체크
 
-            const menuList = []
-            result.map(item => {
-                const menu = new Menu(item.name, item.count)
-                menuList.push(menu)
-            })
-            return menuList
-        }
-        catch(error){
-            MissionUtils.Console.print('[ERROR] 유효하지 않은 주문입니다. 다시 입력해 주세요.')
-        }
-    }
+        this.checkMenuValidity(menuInfo) // 메뉴 형식이 예시와 다른지 체크 
+        const result = this.checkMenuDuplicate(menuInfo) // 중복 메뉴가 있는지 체크
+
+        const menuList = []
+        result.map(item => {
+            const menu = new Menu(item.name, item.count)
+            menuList.push(menu)
+        })
+        return menuList
+}
 
     checkMenuValidity(menuInfo){
         if(!menuInfo.includes('-')) throw new Error('[ERROR] 유효하지 않은 주문입니다. 다시 입력해 주세요.')
