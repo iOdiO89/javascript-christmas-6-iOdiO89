@@ -50,6 +50,22 @@ class Menu{
         if(!Number.isInteger(count)) throw new Error('[ERROR] 유효하지 않은 주문입니다. 다시 입력해 주세요.')
         if(count<1) throw new Error('[ERROR] 유효하지 않은 주문입니다. 다시 입력해 주세요.')
     }
+
+    getName(){
+        return this.#name
+    }
+
+    getCount(){
+        return this.#count
+    }
+
+    getPrice(){
+        return this.#price
+    }
+
+    getType(){
+        return this.#type
+    }
 }
 
 module.exports = Menu
