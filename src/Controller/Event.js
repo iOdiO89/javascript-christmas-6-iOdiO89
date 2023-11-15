@@ -7,7 +7,7 @@ class Event{
     #date // 방문 예상 날짜
     #menu // menu 객체 리스트
     #totalPrice // 할인 전 총 금액
-    #gift // 사은품
+    #gift // 증정품
     #badge // 이벤트 뱃지
     #discount // 할인 금액
     #giftPrice // 증정품 가격
@@ -106,6 +106,7 @@ class Event{
         return false
     }
 
+    // 특별 할인
     #specialDiscount(){
         if(this.#date%7 === 3 || this.#date === 25){
             OutputView.printMsg(`특별 할인: -1,000원`)
@@ -114,6 +115,7 @@ class Event{
         return 0
     }
 
+    // 증정 이벤트
     #giftDiscount(){
         if(this.#totalPrice > 120000){
             OutputView.printMsg(`증정 이벤트: -25,000원`)
@@ -122,26 +124,54 @@ class Event{
         return 0
     }
 
+    // 메뉴 이름, 개수 입력받기
     async #getMenuInfo(){
         const menuInfo = await InputView.readMenuInfo()
-
         this.#checkMenuValidity(menuInfo) // 메뉴 형식이 예시와 다른지 체크 
-        const result = this.#checkMenuDuplicate(menuInfo) // 중복 메뉴가 있는지 체크
+
+        const menuArray = this.#convertMenuArray(menuInfo) // str to array
+        this.#checkMenuCount(menuArray) // 메뉴 총합이 20 넘는지 확인
+        const result = this.#checkMenuDuplicate(menuArray) // 중복 메뉴가 있는지 체크
 
         const menuList = []
         result.map(item => {
             const menu = new Menu(item.name, item.count)
             menuList.push(menu)
         })
+        // this.#checkOnlyDrink(menuList)
         return menuList
     }
 
+    // '메뉴이름-개수' 형식으로 되어있는지 확인
     #checkMenuValidity(menuInfo){
         if(!menuInfo.includes('-')) throw new Error('[ERROR] 유효하지 않은 주문입니다. 다시 입력해 주세요.')
     }
 
-    #checkMenuDuplicate(menuInfo){
-        const menuList = this.#handleMenuInfo(menuInfo) // str to array
+    // string으로 받은 메뉴 이름, 개수를 array로 변환
+    #convertMenuArray(menuInfo){
+        const result = []   
+        menuInfo.split(',').forEach(pair => {
+            const [menuName, count] = pair.split('-')
+            this.#checkMenuUndefined(menuName, count)
+            result.push({ name: menuName.trim(), count: count.trim() })
+        })
+        return result
+    }
+
+    // 메뉴 이름, 개수를 모두 입력했는지 확인
+    #checkMenuUndefined(name, count){
+        if(name===undefined || count===undefined) 
+            throw new Error('[ERROR] 유효하지 않은 주문입니다. 다시 입력해 주세요.')
+    }
+
+    // 메뉴 20개 넘는지 확인
+    #checkMenuCount(menuList){
+        if(menuList.length > 20)
+            throw new Error('[ERROR] 유효하지 않은 주문입니다. 다시 입력해 주세요.')
+    }
+
+    // 메뉴 중복 여부 확인
+    #checkMenuDuplicate(menuList){
         const names = menuList.map(item => item.name)
         const duplicateNames = names.filter((name, i) => names.indexOf(name) !== i)
 
@@ -149,17 +179,16 @@ class Event{
             throw new Error('[ERROR] 유효하지 않은 주문입니다. 다시 입력해 주세요.')
 
         return menuList
-    }    
+    } 
     
-    #handleMenuInfo(menuInfo){
-        const result = []   
-        menuInfo.split(',').forEach(pair => {
-            const [menuName, count] = pair.split('-')
-            if(menuName===undefined || count===undefined) throw new Error('[ERROR] 유효하지 않은 주문입니다. 다시 입력해 주세요.')
-
-            result.push({ name: menuName.trim(), count: count.trim() })
+    #checkOnlyDrink(menuList){
+        let drinkCount = 0
+        menuList.map(menu => {
+            if(menu.getType() === '음료') drinkCount += 1
         })
-        return result
+        
+        if(drinkCount === menuList.length)
+            throw new Error('[ERROR] 유효하지 않은 주문입니다. 다시 입력해 주세요.')
     }
 }
 
