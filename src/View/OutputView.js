@@ -69,6 +69,14 @@ const OutputView = {
             MissionUtils.Console.print("트리")
         else if(discount >= 20000)
             MissionUtils.Console.print("산타")
+    },
+    
+    printGiftDiscount(){
+        MissionUtils.Console.print("증정 이벤트: -25,000원")
+    },
+
+    printSpecialDiscount(){
+        MissionUtils.Console.print("특별 할인: -1,000원")
     }
 }
 

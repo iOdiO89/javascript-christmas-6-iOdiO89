@@ -112,7 +112,7 @@ class Event{
     // 특별 할인
     #specialDiscount(){
         if(this.#date%7 === 3 || this.#date === 25){
-            OutputView.printMsg(`특별 할인: -1,000원`)
+            OutputView.printSpecialDiscount()
             return 1000
         }
         return 0
@@ -121,7 +121,7 @@ class Event{
     // 증정 이벤트
     #giftDiscount(){
         if(this.#totalPrice > 120000){
-            OutputView.printMsg(`증정 이벤트: -25,000원`)
+            OutputView.printGiftDiscount()
             return 25000
         }
         return 0
