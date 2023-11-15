@@ -97,6 +97,38 @@ describe("기능 테스트", () => {
 
         expectLogContains(getOutput(logSpy), expected);
     })
+
+    test("증정 메뉴 타이틀과 없음 출력 ", async () => {
+        // given
+        const logSpy = getLogSpy();
+        mockQuestions(["26", "타파스-1,제로콜라-1"]);
+
+        // when
+        const app = new App();
+        await app.run();
+
+        // then
+        const expected = ["<증정 메뉴>" + LINE_SEPARATOR + "없음"];
+
+        expectLogContains(getOutput(logSpy), expected);
+    })
+
+    test("금액에 맞게 배지 잘 출력되는지 확인", async () => {
+        // given
+        const logSpy = getLogSpy();
+        mockQuestions(["3", "티본스테이크-2,바비큐립-1,초코케이크-2,제로콜라-1"]);
+
+        // when
+        const app = new App();
+        await app.run();
+
+        // then
+        const expected = [
+        "산타"
+        ];
+
+        expectLogContains(getOutput(logSpy), expected);
+    })
 })
 
 describe("예외 테스트", () => {
