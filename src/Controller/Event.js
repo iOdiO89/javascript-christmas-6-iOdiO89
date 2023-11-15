@@ -25,13 +25,13 @@ class Event{
         this.#menu = await this.getMenuInfo()
 
         OutputView.printPreviewMsg(this.#date)
-        // this.printMenu()
-        // this.printTotalPrice()
-        // OutputView.printGift(this.#totalPrice)
-        // this.printBenefit(this.#discount)
-        // OutputView.printTotalDiscount(this.#discount)
-        // OutputView.printFinalPrice(this.#totalPrice, this.#discount)
-        // OutputView.printBadge(this.#discount)
+        this.printMenu()
+        this.printTotalPrice()
+        OutputView.printGift(this.#totalPrice)
+        this.printBenefit(this.#discount)
+        OutputView.printTotalDiscount(this.#discount)
+        OutputView.printFinalPrice(this.#totalPrice, this.#discount)
+        OutputView.printBadge(this.#discount)
     }
 
     printMenu(){
@@ -48,9 +48,8 @@ class Event{
             const count = menu.getCount()
             const price = menu.getPrice()
             this.#totalPrice += count * price
-
-            OutputView.printTotalPrice(this.#totalPrice)
         })
+        OutputView.printTotalPrice(this.#totalPrice)
     }
 
     printBenefit(){
@@ -126,7 +125,6 @@ class Event{
                 const menu = new Menu(item.name, item.count)
                 menuList.push(menu)
             })
-            console.log(`menulength: ${menuList.length}`)
             return menuList
         }
         catch(error){
